@@ -2,7 +2,7 @@ import streamlit as st
 
 
 def app():
-    st.header("MorFi", help="MorFi: eu aplicativo financeiro")
+    st.header("MorFi", help="MorFi: seu aplicativo financeiro")
     st.write("Seu gerenciador financeiro inteligente. ### :green[Sempre à sua maneira]")
 
     if "mensagens" not in st.session_state:
@@ -26,3 +26,6 @@ def app():
         })
 
         st.rerun()
+
+if __name__ == "__main__":
+    app()
