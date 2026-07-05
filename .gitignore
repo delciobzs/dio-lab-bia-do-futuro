@@ -1,0 +1,12 @@
+# Ambiente virtual
+.venv/
+
+# Arquivos sensíveis e chaves (futuros)
+.env
+*.env
+credentials.json
+*.key
+
+# Cache do Python e da IDE
+__pycache__/
+.idea/
