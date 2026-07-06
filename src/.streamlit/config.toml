@@ -1,0 +1,8 @@
+# .streamlit/config.toml
+[theme]
+primaryColor = "#CC092F"          # Vermelho Bradesco (botões, inputs ativos, spinners)
+backgroundColor = "#FFFFFF"      # Fundo principal branco e limpo
+secondaryBackgroundColor = "#F4F5F7" # Fundo secundário (chat_message do assistente, caixas)
+textColor = "#333333"             # Texto principal em cinza escuro para ótima leitura
+redColor = "#CC092F"
+font = "sans serif"

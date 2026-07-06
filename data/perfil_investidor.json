@@ -1,6 +1,7 @@
 {
   "nome": "João Silva",
   "idade": 32,
+  "avatar": "../assets/joao-silva-ia.png",
   "profissao": "Analista de Sistemas",
   "renda_mensal": 5000.00,
   "perfil_investidor": "moderado",
