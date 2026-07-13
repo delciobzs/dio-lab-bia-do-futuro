@@ -1,8 +1,7 @@
 import json
 from pathlib import Path
 import streamlit as st
-from time import sleep
-from random import choice
+from agente import responder_usuario
 
 def app():
     CAMINHO_DIRETORIO = Path(__file__).resolve().parent.parent
@@ -88,14 +87,12 @@ def app():
         with st.chat_message("user", avatar=AVATAR_USUARIO):
             st.write(mensagem_usuario)
 
+        ultima_msg = st.session_state["historico_mensagens"][-1]["texto"]
+
         with st.spinner("Pensando..."):
-            sleep(2)
-            resposta_agente = choice([
-                "O agente de IA do MorFi será adicionado em breve! 🚀",
-                "Calma! Eu to na luta aqui, em breve o agente vem...",
-                "Deixa de ser perturbado (a)!!! Eu já disse que daqui a pouco o agente fica pronto",
-                "MorFi combina morphing e finance. Inspirado no famoso efeito visual do clipe Black or White, em que um rosto se transforma suavemente em outro, o nome representa um agente financeiro que se adapta ao perfil e ao estilo de cada usuário."
-            ])
+            historico_para_envio = st.session_state["historico_mensagens"][:-1]
+            resposta_agente = responder_usuario(ultima_msg, historico_para_envio)
+            st.write(resposta_agente)
 
             st.session_state["historico_mensagens"].append({
                 "usuario": "assistant",
