@@ -3,6 +3,7 @@ from google.genai import types
 from google.genai import errors
 from config import GEMINI_API_KEY
 from templates import SYSTEM_PROMPT
+from pathlib import Path
 from utils import (
     obter_estilo_usuario,
     construir_contexto_usuario,
@@ -10,20 +11,22 @@ from utils import (
     consultar_produtos_financeiros,
     buscar_historico_atendimento,
     atualizar_carteira_investimentos,
-    registrar_nova_transacao
+    registrar_nova_transacao,
+    gerar_relatorio_financeiro
 )
 
 
 client = genai.Client(api_key=GEMINI_API_KEY)
+CAMINHO_DADOS = Path(__file__).resolve().parent.parent / "data"
 
 def responder_usuario(mensagem_usuario, historico_streamlit):
     try:
         # TODO: adicionar log de inicio da preparação de contexto
-        estilo_com, estilo_resp = "Direto e profissional", "detalhado" #obter_estilo_usuario()
+        estilo_com, estilo_resp = obter_estilo_usuario(CAMINHO_DADOS)
         prompt_personalizado = SYSTEM_PROMPT.replace("[[ESTILO_COM]]", estilo_com)
         prompt_personalizado = prompt_personalizado.replace("[[ESTILO_RESP]]", estilo_resp)
 
-        contexto_dinamico = construir_contexto_usuario()
+        contexto_dinamico = construir_contexto_usuario(CAMINHO_DADOS)
         prompt_completo = f"{prompt_personalizado}\n\n{contexto_dinamico}"
 
         configuracao = types.GenerateContentConfig(
@@ -34,7 +37,8 @@ def responder_usuario(mensagem_usuario, historico_streamlit):
                 buscar_historico_atendimento,
                 consultar_ultimas_transacoes,
                 atualizar_carteira_investimentos,
-                registrar_nova_transacao
+                registrar_nova_transacao,
+                gerar_relatorio_financeiro
             ]
         )
 
