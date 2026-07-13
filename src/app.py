@@ -23,6 +23,8 @@ def app():
 
     if "historico_mensagens" not in st.session_state:
         st.session_state.historico_mensagens = []
+    if "processando" not in st.session_state:
+        st.session_state.processando = False
 
     col_avatar_morfi, col_titulo_pagina = st.columns([1, 6])
     with col_avatar_morfi:
@@ -76,7 +78,11 @@ def app():
     else:
         texto_placeholder = f"No que posso te ajudar hoje, {perfil_investidor['nome']}?"
 
-    mensagem_usuario = st.chat_input(texto_placeholder, max_chars=200)
+    mensagem_usuario = st.chat_input(
+        texto_placeholder,
+        disabled=st.session_state.processando,
+        max_chars=200
+    )
 
     if mensagem_usuario:
         st.session_state["historico_mensagens"].append({
@@ -84,24 +90,25 @@ def app():
             "texto": mensagem_usuario
         })
 
-        with st.chat_message("user", avatar=AVATAR_USUARIO):
-            st.write(mensagem_usuario)
+        st.session_state.processando = True
+        st.rerun()
 
+    if st.session_state.processando:
         ultima_msg = st.session_state["historico_mensagens"][-1]["texto"]
 
-        with st.spinner("Pensando..."):
-            historico_para_envio = st.session_state["historico_mensagens"][:-1]
-            resposta_agente = responder_usuario(ultima_msg, historico_para_envio)
-            st.write(resposta_agente)
+        with st.chat_message("assistant", avatar=AVATAR_MORFI):
+            with st.spinner("Pensando..."):
+                historico_para_envio = st.session_state["historico_mensagens"][:-1]
+                resposta_agente = responder_usuario(ultima_msg, historico_para_envio)
+                st.write(resposta_agente)
 
             st.session_state["historico_mensagens"].append({
                 "usuario": "assistant",
                 "texto": resposta_agente
             })
 
-            with st.chat_message("assistant", avatar=AVATAR_MORFI):
-                st.write(resposta_agente)
-        st.rerun()
+            st.session_state.processando = False
+            st.rerun()
 
 if __name__ == "__main__":
     app()

@@ -223,8 +223,7 @@ def gerar_relatorio_financeiro() -> str:
     Acione esta função EXCLUSIVAMENTE quando o usuário pedir um relatório financeiro,
     resumo geral das contas ou análise da saúde financeira.
     """
-    logger_ferramentas.info("Ferramenta acionada: gerar_relatorio_financeiro (Injetando template)")
-
+    
     template_instrucao = """
     [INSTRUÇÃO DE FORMATAÇÃO PARA A RESPOSTA ATUAL]
     O usuário solicitou o Relatório Financeiro. Leia os dados financeiros presentes no seu contexto e 
@@ -243,5 +242,6 @@ def gerar_relatorio_financeiro() -> str:
 # Meta, transações adicionadas...
 
 # TODO: estudar forma de reduzir o system prompt fazendo igual a função de gerar relatório financeiro
+# TODO: Função pra enviar relatório por email, talvez com dados estruturados num arquivo
 
 
