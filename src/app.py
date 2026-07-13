@@ -2,9 +2,13 @@ import json
 from pathlib import Path
 import streamlit as st
 from agente import responder_usuario
-from utils import registrar_auditoria
+from utils import registrar_auditoria, obter_logger
+
+logger = obter_logger("app")
 
 def app():
+    logger.info("Inicializando interface do MorFi.")
+
     CAMINHO_DIRETORIO = Path(__file__).resolve().parent.parent
     CAMINHO_JSON = CAMINHO_DIRETORIO / "data" / "perfil_investidor.json"
     AVATAR_MORFI = str(CAMINHO_DIRETORIO / "assets" / "morphi-avatar-ia.png")
@@ -19,6 +23,7 @@ def app():
                 AVATAR_USUARIO = str(caminho_potencial)
             else:
                 AVATAR_USUARIO = "👤"
+                logger.warning(f"Avatar não encontrado no caminho: {caminho_potencial}")
         else:
             AVATAR_USUARIO = "👤"
 

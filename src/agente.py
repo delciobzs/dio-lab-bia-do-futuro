@@ -5,6 +5,7 @@ from config import GEMINI_API_KEY
 from templates import SYSTEM_PROMPT
 from pathlib import Path
 from utils import (
+    obter_logger,
     obter_estilo_usuario,
     construir_contexto_usuario,
     consultar_ultimas_transacoes,
@@ -15,13 +16,13 @@ from utils import (
     gerar_relatorio_financeiro
 )
 
-
+logger = obter_logger("agente")
 client = genai.Client(api_key=GEMINI_API_KEY)
 CAMINHO_DADOS = Path(__file__).resolve().parent.parent / "data"
 
 def responder_usuario(mensagem_usuario, historico_streamlit):
     try:
-        # TODO: adicionar log de inicio da preparação de contexto
+        logger.info("Iniciando preparação de contexto para o Gemini.")
         estilo_com, estilo_resp = obter_estilo_usuario(CAMINHO_DADOS)
         prompt_personalizado = SYSTEM_PROMPT.replace("[[ESTILO_COM]]", estilo_com)
         prompt_personalizado = prompt_personalizado.replace("[[ESTILO_RESP]]", estilo_resp)
@@ -58,18 +59,18 @@ def responder_usuario(mensagem_usuario, historico_streamlit):
             config=configuracao,
             history=historico_gemini
         )
-        # TODO: adicionar log de chamada de API
+        logger.info("Enviando requisição para a API do Google.")
         resposta = chat.send_message(mensagem_usuario)
-        # TODO: adicionar log de reposta de API
+        logger.info("Resposta recebida com sucesso da API.")
         return resposta.text
 
     except errors.APIError as erro:
         if erro.code == 429 or "quota" in str(erro).lower() or "exhausted" in str(erro).lower():
-            # TODO: adicionar log de limite de API
+            logger.warning("Limite de cota da API do Gemini atingido.")
             return "Atingimos o limite de uso temporário da inteligência artificial. Por favor, aguarde cerca de um minuto e tente enviar sua mensagem novamente."
-        # TODO: adicionar log de falhas de API
+        logger.error(f"Falha na API do Gemini: {erro}", exc_info=True)
         return "Desculpe, enfrentei uma instabilidade técnica na comunicação. Poderia tentar novamente em instantes?"
 
     except Exception as erro:
-        # TODO: adicionar log de falhas de código
+        logger.error(f"Erro inesperado no sistema: {erro}", exc_info=True)
         return "Ocorreu um erro interno no sistema. Tente novamente mais tarde."
