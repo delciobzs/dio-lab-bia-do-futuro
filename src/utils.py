@@ -3,6 +3,30 @@ import pandas as pd
 from datetime import datetime
 from pathlib import Path
 
+CAMINHO_BASE = Path(__file__).resolve().parent.parent
+CAMINHO_LOGS = CAMINHO_BASE / "logs"
+#CAMINHO_DADOS = CAMINHO_BASE / "data"
+CAMINHO_HISTORICO = CAMINHO_BASE / "historico_chats"
+
+CAMINHO_LOGS.mkdir(parents=True, exist_ok=True)
+CAMINHO_HISTORICO.mkdir(parents=True, exist_ok=True)
+ARQUIVO_SISTEMA = CAMINHO_LOGS / "sistema.log"
+ARQUIVO_AUDITORIA = CAMINHO_HISTORICO / "auditoria_chat.jsonl"
+
+# Função para persistir histórico de mensagem
+def registrar_auditoria(papel: str, texto: str):
+    """Salva a mensagem num arquivo jsonl com timestamp preciso (ISO 8601 com fuso horário)."""
+    timestamp_preciso = datetime.now().astimezone().isoformat()
+
+    registro = {
+        "data_hora": timestamp_preciso,
+        "papel": papel,
+        "mensagem": texto
+    }
+
+    with open(ARQUIVO_AUDITORIA, "a", encoding="utf-8") as arquivo_log:
+        arquivo_log.write(json.dumps(registro, ensure_ascii=False) + "\n")
+
 # Funções de contexto do usuário
 def obter_estilo_usuario(caminho_dados: Path) -> tuple:
     """

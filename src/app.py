@@ -2,6 +2,7 @@ import json
 from pathlib import Path
 import streamlit as st
 from agente import responder_usuario
+from utils import registrar_auditoria
 
 def app():
     CAMINHO_DIRETORIO = Path(__file__).resolve().parent.parent
@@ -89,7 +90,7 @@ def app():
             "usuario": "user",
             "texto": mensagem_usuario
         })
-
+        registrar_auditoria("usuario", mensagem_usuario)
         st.session_state.processando = True
         st.rerun()
 
@@ -106,7 +107,7 @@ def app():
                 "usuario": "assistant",
                 "texto": resposta_agente
             })
-
+            registrar_auditoria("agente", resposta_agente)
             st.session_state.processando = False
             st.rerun()
 
