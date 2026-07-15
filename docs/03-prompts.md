@@ -149,7 +149,6 @@ Estou aqui para te ajudar a organizar seus gastos, analisar despesas e sugerir m
 Posso te ajudar com algo relacionado às suas finanças? 
 ``
 
-
 ---
 
 
@@ -159,7 +158,9 @@ Posso te ajudar com algo relacionado às suas finanças?
 
 
 - A instrução "Não diga que não tem acesso; chame a função correspondente silenciosamente" foi necessária porque, sem ela, o modelo às vezes respondia "não tenho acesso a essa informação" mesmo tendo ferramentas disponíveis para buscar o dado.
+
 - `temperature=0.3` foi escolhido para equilibrar naturalidade da resposta com baixa variabilidade/alucinação, já que o domínio financeiro exige precisão nos números apresentados.
 - Como o MorFi se adapta ao perfil do usuário, as repostas podem e devem variar.
+
 - Haverá um documento dedicado aos testes de funcionamento para avaliar de forma mais ampla se o agente realmente entrega o que se propõe. Abrangerá também uma parte dedicada à testes de segurança. Esatará nesta mesma pasta.
 - Haverá também um documento dedicado a observações, aprendizados. O objetivo é detalhar as etapas de construção, desenvolvimento da idéia, problemas do app, novas funcionalidades a serem incluídas, construção do system prompt, redução de custo limitando o tamanho de resposta e diminuindo o system prompt e soluções pensadas, mas não implementadas e os devidos motivos.
