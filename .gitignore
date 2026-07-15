@@ -1,11 +1,16 @@
 # Ambiente virtual
 .venv/
 
+# Ignora conteudos gerados dinamicamente
+logs/*.log
+historico_chats/*.jsonl
+
 # Arquivos sensíveis e chaves (futuros)
 .env
 *.env
 credentials.json
 *.key
+*.log
 
 # Cache do Python e da IDE
 __pycache__/
