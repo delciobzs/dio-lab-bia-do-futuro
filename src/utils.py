@@ -171,16 +171,20 @@ def buscar_historico_atendimento(tema: str = "") -> str:
             resultado_texto += f"- Data: {linha['data']} | Tema: {linha['tema']} | Status: {status} | Resumo: {linha['resumo']}\n"
 
         return resultado_texto
+    except Exception as erro:
+        logger_ferramentas.error(f"Erro ao processar historico_atendimento.csv: {erro}", exc_info=True)
+        return "Erro interno ao buscar o histórico de tickets."
 
-        def consultar_ultimas_transacoes() -> str:
-        """Consulta o extrato detalhado, gastos e as últimas movimentações financeiras do usuário."""
+def consultar_ultimas_transacoes() -> str:
+    """Consulta o extrato detalhado, gastos e as últimas movimentações financeiras do usuário."""
+    logger_ferramentas.info("Ferramenta acionada: consultar_ultimas_transacoes")
+    caminho_arquivo = CAMINHO_DADOS / "transacoes.csv"
 
-        caminho_arquivo = CAMINHO_DADOS / "transacoes.csv"
+    if not caminho_arquivo.exists():
+        logger_ferramentas.error(f"Falha: Arquivo não encontrado em {caminho_arquivo}")
+        return "Erro: Arquivo de transações não encontrado no sistema."
 
-        if not caminho_arquivo.exists():
-            return "Erro: Arquivo de transações não encontrado no sistema."
-
-
+    try:
         df_transacoes = pd.read_csv(caminho_arquivo)
         resultado_texto = "Últimas transações do usuário:\n"
 
@@ -231,6 +235,8 @@ def consultar_produtos_financeiros(risco: str) -> str: # receberá risco ou perf
         if not produtos_filtrados:
             logger_ferramentas.warning(f"Consulta finalizada: Nenhum produto encontrado para o risco '{risco}'.")
             return f"Nenhum produto encontrado para o nível de risco: {risco}."
+
+        logger_ferramentas.info(f"Consulta finalizada: {len(produtos_filtrados)} produtos retornados para a IA.")
 
         resultado_texto = f"Produtos da corretora com risco '{risco}':\n"
         for p in produtos_filtrados:
